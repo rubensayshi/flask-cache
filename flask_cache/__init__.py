@@ -22,6 +22,7 @@ import uuid
 import warnings
 
 from werkzeug import import_string
+from werkzeug.contrib.cache import NullCache
 from flask import request, current_app
 
 from ._compat import PY2
@@ -190,6 +191,10 @@ class Cache(object):
     def cache(self):
         app = self.app or current_app
         return app.extensions['cache'][self]
+
+    @property
+    def is_null(self):
+        return not self.cache or isinstance(self.cache, NullCache)
 
     def get(self, *args, **kwargs):
         "Proxy function for internal cache object."
